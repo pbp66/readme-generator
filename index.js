@@ -1,3 +1,12 @@
+class Question {
+    constructor() {
+        this.type;
+        this.name;
+        this.message;
+        this.choices;
+    }
+}
+
 // TODO: Include packages needed for this application
 // Is this right?
 //import defaultExport from "generateMarkdown";
