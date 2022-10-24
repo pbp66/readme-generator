@@ -36,17 +36,18 @@ function writeToFile(fileName, data) {
 
 }
 
-function askQuestions() {
-    // let answers = [];
-    // inquirer.prompt(questions, answers)
-    //     .then((answers) => {
-    //         console.log(answers);
+function askQuestions(questionObjects) {
+    let answers = [];
+    inquirer.prompt(questionObjects, answers)
+        .then((answers) => {
+            console.log(answers);
+        });
 }
 
 function generateQuestionObjects(questionList, questionTitles) {
     let objList = [];
     for (let i = 0; i < questionList.length; i++) {
-        let temp = new Question("editor", questionTitles[i], questionList[i]);
+        let temp = new Question("input", questionTitles[i], questionList[i]);
         objList.push(temp);
     }
     //console.log(objList);
@@ -56,10 +57,17 @@ function generateQuestionObjects(questionList, questionTitles) {
 
 // TODO: Create a function to initialize app
 function init() {
-    questionObjs = generateQuestionObjects(questions, questionTitles);
+    
 }
 
 // Function call to initialize app
 init();
+
+questionObjs = generateQuestionObjects(questions, questionTitles);
+askQuestions(questionObjs);
+
+
+
+// DEV TESTING SECTION
 
 //new inquirer.Question();
