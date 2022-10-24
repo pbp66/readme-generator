@@ -27,6 +27,10 @@ const inquirer = require('inquirer');
 // TODO: Create an array of questions for user input
 const questions = ["What is the title of the project?", "Update the project description.", "Update the installation instructions.", "Update the usage information.", "Update the contribution guidelines.", "Update the test instructions", "Update the project license.", "Update the project owner GitHub user name.", "Update project owner email address."];
 
+const questionTitles = ["title", "description", "installation", "usage", "contribution", "testing", "license", "username", "email"];
+
+let questionObjs = [];
+
 // TODO: Create a function to write README file
 function writeToFile(fileName, data) {
 
@@ -39,17 +43,23 @@ function askQuestions() {
     //         console.log(answers);
 }
 
-function generateQuestionObjects(questionList) {
-
+function generateQuestionObjects(questionList, questionTitles) {
+    let objList = [];
+    for (let i = 0; i < questionList.length; i++) {
+        let temp = new Question("editor", questionTitles[i], questionList[i]);
+        objList.push(temp);
+    }
+    //console.log(objList);
+    return objList;
 }
 
 
 // TODO: Create a function to initialize app
 function init() {
-
+    questionObjs = generateQuestionObjects(questions, questionTitles);
 }
 
 // Function call to initialize app
 init();
 
-new inquirer.Question()
+//new inquirer.Question();
