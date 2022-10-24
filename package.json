@@ -17,6 +17,6 @@
   },
   "homepage": "https://github.com/pbp66/readme-generator#readme",
   "dependencies": {
-    "inquirer": "^9.1.4"
+    "inquirer": "^8.2.5"
   }
 }
