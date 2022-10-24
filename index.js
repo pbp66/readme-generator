@@ -1,9 +1,21 @@
 class Question {
-    constructor() {
-        this.type;
-        this.name;
-        this.message;
+    constructor(answerType, questionName, question) {
+        this.type = answerType; //editor?
+        this.name = questionName;
+        this.message = question;
+        this.default = "string";
+
         this.choices;
+        this.validate;
+        this.filter;
+        this.transformer;
+        this.when;
+        this.pageSize;
+        this.prefix;
+        this.suffix;
+        this.askAnswered;
+        this.loop;
+        this.waitUserInput = true;
     }
 }
 
@@ -20,18 +32,24 @@ function writeToFile(fileName, data) {
 
 }
 
-// TODO: Create a function to initialize app
-function init() {
-
-}
-
 function askQuestions() {
     // let answers = [];
     // inquirer.prompt(questions, answers)
     //     .then((answers) => {
     //         console.log(answers);
-    //     });
+}
+
+function generateQuestionObjects(questionList) {
+
+}
+
+
+// TODO: Create a function to initialize app
+function init() {
+
 }
 
 // Function call to initialize app
 init();
+
+new inquirer.Question()
