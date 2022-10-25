@@ -139,3 +139,9 @@ class Questions {
         }
     }
 }
+
+module.exports = {
+    SimpleQuestion: SimpleQuestion,
+    Question: Question,
+    Questions: Questions,
+}
