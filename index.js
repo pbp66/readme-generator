@@ -1,37 +1,14 @@
-class Question {
-    constructor(answerType, questionName, question) {
-        this.type = answerType; //editor?
-        this.name = questionName;
-        this.message = question;
-        this.default = "string";
-
-        this.choices;
-        this.validate;
-        this.filter;
-        this.transformer;
-        this.when;
-        this.pageSize;
-        this.prefix;
-        this.suffix;
-        this.askAnswered;
-        this.loop;
-        this.waitUserInput = true;
-    }
-}
-
 // TODO: Include packages needed for this application
-// Is this right?
-//import defaultExport from "generateMarkdown";
+//import generateMarkdown from "./utils/generateMarkdown.js"; // ESM6 syntax for importing modules
 const inquirer = require('inquirer'); // Load inquirer module for clean user input
 const fs = require('fs'); // Load file server module for file I/O
 const gM = require('./utils/generateMarkdown.js'); // Load generateMarkdown script/module to access those functions
+const q = require('./utils/questions.js'); // Load questions.js class definitions
 
 // TODO: Create an array of questions for user input
 const questions = ["What is the title of the project?", "Update the project description.", "Update the installation instructions.", "Update the usage information.", "Update the contribution guidelines.", "Update the test instructions", "Update the project license.", "Update the project owner GitHub user name.", "Update project owner email address."];
 
 const questionTitles = ["title", "description", "installation", "usage", "contribution", "testing", "license", "username", "email"];
-
-let questionObjs = [];
 
 // TODO: Create a function to write README file
 function writeToFile(fileName, data) {
@@ -46,27 +23,17 @@ function askQuestions(questionObjects) {
         });
 }
 
-function generateQuestionObjects(questionList, questionTitles) {
-    let objList = [];
-    for (let i = 0; i < questionList.length; i++) {
-        let temp = new Question("input", questionTitles[i], questionList[i]);
-        objList.push(temp);
-    }
-    //console.log(objList);
-    return objList;
-}
-
 
 // TODO: Create a function to initialize app
 function init() {
-    
+    return new q.Questions(questions, questionTitles);
 }
 
 // Function call to initialize app
-init();
+let questionObjs = init();
+//console.log(questionObjs);
 
-questionObjs = generateQuestionObjects(questions, questionTitles);
-askQuestions(questionObjs);
+askQuestions(questionObjs.questions);
 
 
 
