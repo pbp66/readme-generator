@@ -95,7 +95,7 @@ class Markdown {
                 return `[${toTitleCase(element)}](#${element}\n)`;
             }
         });
-        return toc;
+        return toc.join("");
     }
 
     generateCreditsSection() {
@@ -110,43 +110,45 @@ class Markdown {
 
     generateMarkdown() {
         let markdown = 
-        `# ${this.title}
+            `
+            # ${this.title}
 
-        ## Description
-        
-        ${this.description}
-        
-        ## Table of Contents
-        
-        ${this.toc}
-        
-        ## Installation
-        
-        ${this.installation}
-        
-        ## Usage
-        
-        ${this.usage}
+            ## Description
+            
+            ${this.description}
+            
+            ## Table of Contents
+            
+            ${this.toc}
+            
+            ## Installation
+            
+            ${this.installation}
+            
+            ## Usage
+            
+            ${this.usage}
 
-        ## Credits
-        
-        ${this.credits}
-        
-        ## License
-        
-        ${this.license}
-        
-        ## How to Contribute
+            ## Credits
+            
+            ${this.credits}
+            
+            ## License
+            
+            ${this.license}
+            
+            ## How to Contribute
 
-        ${this.contribution}
+            ${this.contribution}
 
-        ## Questions
+            ## Questions
 
-        ${this.questions}
-        
-        ## Tests
-        
-        ${this.tests}`
+            ${this.questions}
+            
+            ## Tests
+            
+            ${this.tests}
+            `
 
         return markdown;
     }
