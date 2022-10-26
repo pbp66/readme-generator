@@ -11,3 +11,5 @@ class Answer {
         this.email;
     }
 }
+
+module.exports = Answer;
