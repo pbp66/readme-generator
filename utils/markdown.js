@@ -66,7 +66,7 @@ class Markdown {
         return "";
     }
 
-    generateTestingSection(testing) {
+    generateTestsSection(testing) {
         let valid = this.#isValidString(testing);
         if (valid) {
             return testing;
@@ -77,21 +77,22 @@ class Markdown {
     }
 
     generateQuestionsSection(username, email) {
-        let validUsername = this.#isValidString(username);
-        let validEmail = this.#isValidString(email);
-        if (valid) {
+        // let validUsername = this.#isValidString(username);
+        // let validEmail = this.#isValidString(email);
+        // if (valid) {
 
-        }
+        // }
         
         // If input is not valid, return an empty string
-        return "";
+        // return "";
+        return `${username} @ ${email}`;
     }
 
     generateTOC() {
         let keys = Object.keys(this);
         let toc = keys.filter(element => {
             if (!(["title", "description"].includes(element))) {
-                return `[${toTitleCase(element)}](#${element})`;
+                return `[${toTitleCase(element)}](#${element}\n)`;
             }
         });
         return toc;
@@ -101,7 +102,7 @@ class Markdown {
         // TODO: Generate collaborators based on repo contributions. GitHub API?
     }
     
-    generateLicense(license) {
+    generateLicenseSection(license) {
         this.#renderLicenseBadge();
         this.#renderLicenseLink();
         this.#renderLicenseSection();
@@ -168,7 +169,8 @@ class Markdown {
     }
 
     #isValidString(string) {
-        return string instanceof String;
+        //console.log(`input (${string}) is an instance of String: ${typeof string}`)
+        return (typeof string) === "string";
     }
 }
 
