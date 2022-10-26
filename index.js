@@ -27,8 +27,6 @@ function askQuestions(questionObjects) {
 
             let newMD = new markdown.Markdown(answerObj);
             let markdownContent = newMD.generateMarkdown()
-
-            console.log(answerObj);
             console.log(markdownContent);
             
             //writeToFile("README.md", markdownContent);

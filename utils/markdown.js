@@ -110,8 +110,7 @@ class Markdown {
 
     generateMarkdown() {
         let markdown = 
-        `
-        # ${this.title}
+        `# ${this.title}
 
         ## Description
         
@@ -137,18 +136,13 @@ class Markdown {
         
         ${this.license}
         
-        ## Features
-        
-        If your project has a lot of features, list them here.
-        
         ## How to Contribute
 
         ${this.contribution}
         
         ## Tests
         
-        ${this.testing}
-        `
+        ${this.tests}`
 
         return markdown;
     }
@@ -175,7 +169,6 @@ class Markdown {
 }
 
 function toTitleCase(string) {
-    let newString = "";
     let words = string.toLowerCase().split(" ");
     words.forEach(element => {
         return element.slice(0).toUpperCase() + element.slice(1, -1);
@@ -184,5 +177,4 @@ function toTitleCase(string) {
     return words.join(" ");
 }
 
-//module.exports = generateMarkdown;
 module.exports = {Markdown: Markdown};
