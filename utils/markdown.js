@@ -90,12 +90,12 @@ class Markdown {
 
     generateTOC() {
         let keys = Object.keys(this);
-        let toc = keys.filter(element => {
-            if (!(["title", "description"].includes(element))) {
-                return `[${toTitleCase(element)}](#${element}\n)`;
-            }
-        });
-        return toc.join("");
+        let toc = [];
+
+        // TODO: Update tabs and spacing for proper format in the file
+        toc = keys.filter(element => !(["title", "description"].includes(element)));
+        toc = toc.map(element => `[${toTitleCase(element)}](#${element})\n`);
+        return toc.join("\t    ");
     }
 
     generateCreditsSection() {
@@ -114,29 +114,29 @@ class Markdown {
             # ${this.title}
 
             ## Description
-            
+
             ${this.description}
-            
+
             ## Table of Contents
-            
+
             ${this.toc}
-            
+
             ## Installation
-            
+
             ${this.installation}
-            
+
             ## Usage
-            
+
             ${this.usage}
 
             ## Credits
-            
+
             ${this.credits}
-            
+
             ## License
-            
+
             ${this.license}
-            
+
             ## How to Contribute
 
             ${this.contribution}
@@ -144,9 +144,9 @@ class Markdown {
             ## Questions
 
             ${this.questions}
-            
+
             ## Tests
-            
+
             ${this.tests}
             `
 
@@ -176,8 +176,10 @@ class Markdown {
 
 function toTitleCase(string) {
     let words = string.toLowerCase().split(" ");
-    words.forEach(element => {
-        return element.slice(0).toUpperCase() + element.slice(1, -1);
+    //TODO: Change using map?
+    words.forEach((element, index, array)=> {
+        //return element.slice(0).toUpperCase() + element.slice(1, -1);
+        array[index] = element[0].toUpperCase() + element.slice(1, element.length);
     });
 
     return words.join(" ");
