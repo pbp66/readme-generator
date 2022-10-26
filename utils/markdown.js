@@ -139,6 +139,10 @@ class Markdown {
         ## How to Contribute
 
         ${this.contribution}
+
+        ## Questions
+
+        ${this.questions}
         
         ## Tests
         
