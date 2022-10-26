@@ -2,7 +2,7 @@
 //import generateMarkdown from "./utils/generateMarkdown.js"; // ESM6 syntax for importing modules
 const inquirer = require('inquirer'); // Load inquirer module for clean user input
 const fs = require('fs'); // Load file server module for file I/O
-const markdown = require('./utils/generateMarkdown.js'); // Load generateMarkdown script/module to access those functions
+const markdown = require('./utils/markdown.js'); // Load generateMarkdown script/module to access those functions
 const question = require('./utils/questions.js'); // Load questions.js class definitions
 
 // TODO: Create an array of questions for user input
