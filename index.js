@@ -1,5 +1,3 @@
-// TODO: Include packages needed for this application
-//import generateMarkdown from "./utils/generateMarkdown.js"; // ESM6 syntax for importing modules
 const inquirer = require('inquirer'); // Load inquirer module for clean user input
 const fs = require('fs'); // Load file server module for file I/O
 const markdown = require('./utils/markdown.js'); // Load markdown.js class
@@ -13,7 +11,6 @@ const questions = ["What is the title of the project?", "Update the project desc
 // TODO: Change to the keys of an answer class instance
 const questionTitles = ["title", "description", "installation", "usage", "contribution", "tests", "license", "username", "email"];
 
-// TODO: Create a function to write README file
 function writeToFile(fileName, data) {
     fs.writeFile(`./${fileName}`, data, err => {
         if (err) {
@@ -28,15 +25,11 @@ function askQuestions(questionObjects) {
         .then((answers) => {
             let answerObj = new a.Answer();
             Object.assign(answerObj, answers);
-
             let newMD = new markdown.Markdown(answerObj);
-            let markdownContent = newMD.generateMarkdown()
-            console.log(markdownContent);
-            
+            let markdownContent = newMD.generateMarkdown()           
             writeToFile("README.md", markdownContent);
         });
 }
-
 
 // TODO: Create a function to initialize app
 function init() {
@@ -54,5 +47,3 @@ function main() {
 main();
 
 // DEV TESTING SECTION
-
-//new inquirer.Question();

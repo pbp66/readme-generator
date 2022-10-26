@@ -94,7 +94,7 @@ class Markdown {
 
         // TODO: Update tabs and spacing for proper format in the file
         toc = keys.filter(element => !(["title", "description"].includes(element)));
-        toc = toc.map(element => ` - [${toTitleCase(element)}](#${element})\n`);
+        toc = toc.map((element, index) => `${index + 1} [${toTitleCase(element)}](#${element})\n`);
         return toc.join("");
     }
 
