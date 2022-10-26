@@ -11,7 +11,7 @@ const { mainModule } = require('process');
 const questions = ["What is the title of the project?", "Update the project description.", "Update the installation instructions.", "Update the usage information.", "Update the contribution guidelines.", "Update the test instructions", "Update the project license.", "Update the project owner GitHub user name.", "Update project owner email address."];
 
 // TODO: Change to the keys of an answer class instance
-const questionTitles = ["title", "description", "installation", "usage", "contribution", "testing", "license", "username", "email"];
+const questionTitles = ["title", "description", "installation", "usage", "contribution", "tests", "license", "username", "email"];
 
 // TODO: Create a function to write README file
 function writeToFile(fileName, data) {

@@ -5,7 +5,7 @@ class Markdown {
         this.installation = this.generateInstallationSection(dataToRender.installation);
         this.usage = this.generateUsageSection(dataToRender.usage);
         this.contribution = this.generateContributionSection(dataToRender.contribution);
-        this.testing = this.generateTestingSection(dataToRender.testing);
+        this.tests = this.generateTestsSection(dataToRender.testing);
         this.license = this.generateLicenseSection(dataToRender.license);
         this.questions = this.generateQuestionsSection(dataToRender.username, dataToRender.email);
         //this.credits = this.generateCreditsSection(dataToRender);
@@ -26,6 +26,9 @@ class Markdown {
 
     generateDescriptionSection(description) {
         let valid = this.#isValidString(description);
+        if (valid) {
+            return description;
+        }
 
         // If input is not valid, return an empty string
         return "";
@@ -33,45 +36,69 @@ class Markdown {
 
     generateInstallationSection(installation) {
         let valid = this.#isValidString(installation);
-
+        if (valid) {
+            return installation;
+        }
+        
         // If input is not valid, return an empty string
         return "";
     }
 
     generateUsageSection(usage) {
         let valid = this.#isValidString(usage);
+        if (valid) {
+            return usage;
+        }
 
+        // TODO: Add images automatically? or video content?
+        
         // If input is not valid, return an empty string
         return "";
     }
 
     generateContributionSection(contribution) {
         let valid = this.#isValidString(contribution);
-
+        if (valid) {
+            return contribution;
+        }
+        
         // If input is not valid, return an empty string
         return "";
     }
 
     generateTestingSection(testing) {
         let valid = this.#isValidString(testing);
-
+        if (valid) {
+            return testing;
+        }
+        
         // If input is not valid, return an empty string
         return "";
     }
 
     generateQuestionsSection(username, email) {
-        let valid = this.#isValidString();
+        let validUsername = this.#isValidString(username);
+        let validEmail = this.#isValidString(email);
+        if (valid) {
 
+        }
+        
         // If input is not valid, return an empty string
         return "";
     }
 
     generateTOC() {
-        
+        let keys = Object.keys(this);
+        let toc = keys.filter(element => {
+            if (!(["title", "description"].includes(element))) {
+                return `[${toTitleCase(element)}](#${element})`;
+            }
+        });
+        return toc;
     }
 
     generateCreditsSection() {
-
+        // TODO: Generate collaborators based on repo contributions. GitHub API?
     }
     
     generateLicense(license) {

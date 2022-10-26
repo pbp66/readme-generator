@@ -5,7 +5,7 @@ class Answer {
         this.installation;
         this.usage;
         this.contribution;
-        this.testing;
+        this.tests;
         this.license;
         this.username;
         this.email;
