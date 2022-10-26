@@ -25,27 +25,45 @@ class Markdown {
     }
 
     generateDescriptionSection(description) {
-        
+        let valid = this.#isValidString(description);
+
+        // If input is not valid, return an empty string
+        return "";
     }
 
     generateInstallationSection(installation) {
-        
+        let valid = this.#isValidString(installation);
+
+        // If input is not valid, return an empty string
+        return "";
     }
 
     generateUsageSection(usage) {
-        
+        let valid = this.#isValidString(usage);
+
+        // If input is not valid, return an empty string
+        return "";
     }
 
     generateContributionSection(contribution) {
-        
+        let valid = this.#isValidString(contribution);
+
+        // If input is not valid, return an empty string
+        return "";
     }
 
     generateTestingSection(testing) {
-        
+        let valid = this.#isValidString(testing);
+
+        // If input is not valid, return an empty string
+        return "";
     }
 
-    generateQuestionsSection(questions) {
-        
+    generateQuestionsSection(username, email) {
+        let valid = this.#isValidString();
+
+        // If input is not valid, return an empty string
+        return "";
     }
 
     generateTOC() {
