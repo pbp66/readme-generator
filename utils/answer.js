@@ -12,4 +12,4 @@ class Answer {
     }
 }
 
-module.exports = Answer;
+module.exports = {Answer: Answer};

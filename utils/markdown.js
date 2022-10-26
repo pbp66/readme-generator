@@ -183,4 +183,4 @@ function toTitleCase(string) {
 }
 
 //module.exports = generateMarkdown;
-module.exports = Markdown;
+module.exports = {Markdown: Markdown};
