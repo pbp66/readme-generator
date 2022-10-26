@@ -10,6 +10,4 @@ class Answer {
         this.username;
         this.email;
     }
-
-
 }
