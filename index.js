@@ -15,7 +15,11 @@ const questionTitles = ["title", "description", "installation", "usage", "contri
 
 // TODO: Create a function to write README file
 function writeToFile(fileName, data) {
-
+    fs.writeFile(`./${fileName}`, data, err => {
+        if (err) {
+            console.error(err);
+        }
+    });
 }
 
 function askQuestions(questionObjects) {
@@ -29,7 +33,7 @@ function askQuestions(questionObjects) {
             let markdownContent = newMD.generateMarkdown()
             console.log(markdownContent);
             
-            //writeToFile("README.md", markdownContent);
+            writeToFile("README.md", markdownContent);
         });
 }
 
