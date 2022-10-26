@@ -15,7 +15,13 @@ class Markdown {
     }
 
     generateTitleSection(title) {
-        
+        let valid = this.#isValidString(title);
+        if (valid)  {
+            return toTitleCase(title);
+        }
+
+        // If input is not valid, return an empty string
+        return "";
     }
 
     generateDescriptionSection(description) {
@@ -116,6 +122,19 @@ class Markdown {
         
     }
 
+    #isValidString(string) {
+        return string instanceof String;
+    }
+}
+
+function toTitleCase(string) {
+    let newString = "";
+    let words = string.toLowerCase().split(" ");
+    words.forEach(element => {
+        return element.slice(0).toUpperCase() + element.slice(1, -1);
+    });
+
+    return words.join(" ");
 }
 
 //module.exports = generateMarkdown;
