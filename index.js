@@ -7,7 +7,7 @@ const question = require('./utils/questions.js'); // Load questions.js class def
 const answer = require('./utils/answer.js'); // Load answer.js class
 const { mainModule } = require('process');
 
-// TODO: Create an array of questions for user input
+// TODO: Update array of questions for user input. Use template questions instead?
 const questions = ["What is the title of the project?", "Update the project description.", "Update the installation instructions.", "Update the usage information.", "Update the contribution guidelines.", "Update the test instructions", "Update the project license.", "Update the project owner GitHub user name.", "Update project owner email address."];
 
 // TODO: Change to the keys of an answer class instance
@@ -22,7 +22,16 @@ function askQuestions(questionObjects) {
     let answers = [];
     inquirer.prompt(questionObjects, answers)
         .then((answers) => {
-            console.log(answers);
+            let answerObj = new answer.Answer();
+            Object.assign(answerObj, answers);
+
+            let newMD = new markdown.Markdown(answerObj);
+            let markdownContent = newMD.generateMarkdown()
+
+            console.log(answerObj);
+            console.log(markdownContent);
+            
+            //writeToFile("README.md", markdownContent);
         });
 }
 
