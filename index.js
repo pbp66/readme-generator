@@ -5,17 +5,19 @@ const question = require('./utils/questions.js'); // Load questions.js class def
 const a = require('./utils/answer.js'); // Load answer.js class
 
 class FilePath {
-    // Private Member Property
+    // Private Member Properties
     #defaultPath = "./README.md";
-    
+    #root;
+    #directory;
+    #fileName;
+    #name;
+    #extension;
+
     // Public Member Properties
-    filePath;
-    directory;
-    fileName;
-    extension;
+    path;
 
     constructor(pathString) {
-        this.#setFile(path.resolve(pathString)); // Do I need further verification?
+        this.update(pathString);
     }
 
     validFile() {
@@ -26,20 +28,79 @@ class FilePath {
 
     }
 
-    #setFile(file) {
-        this.filePath = file;
-        this.directory = path.dirname(file);
-        this.fileName = path.basename(file);
-        this.extension = path.extname(file);
+    getRoot() {
+        return this.#root;
+    }
+
+    setRoot(root) {
+        this.#root = root;
+        this.buildPath(this.#root, this.#directory, this.#fileName);
+    }
+
+    getDirectory() {
+        return this.#directory;
+    }
+
+    setDirectory(dir) {
+        this.#directory = dir;
+        this.buildPath(this.#directory, this.#fileName);
+    }
+
+    getFileName() {
+        return this.#fileName;
+    }
+
+    setFileName(fN) {
+        this.#fileName = fN;
+        this.buildPath(this.#directory, this.#fileName);
+    }
+
+    getName() {
+        return this.#name;
+    }
+
+    setName(name) {
+        this.#name = name;
+        this.buildPath(this.#directory, this.#name, this.#ext);
+    }
+
+    getExtension() {
+        return this.#extension;
+    }
+
+    setExtension(ext) {
+        this.#extension = ext;
+        this.buildPath(this.#directory, this.#name, this.#ext);
+    }
+
+    update(file) {
+        let {root, dir, base, name, ext} = path.parse(file);
+        
+        this.#root = root;
+        this.#directory = dir;
+        this.#fileName = base;
+        this.#name = name;
+        this.#extension = ext;
+        this.buildPath(dir, base);
+    }
+
+    buildPath(...paths) {
+        this.path = path.join(...paths);
     }
 
     #defaultFile() {
-        this.#setFile(this.#defaultPath);
+        this.updateFile(this.#defaultPath);
     }
 }
 
 function writeToFile(filePath, data) {
-    fs.writeFile(`${filePath}`, data, err => {
+    let options = {
+        encoding: "utf8",
+        flag: "w",
+        mode: 0o666
+    };
+
+    fs.writeFile(`${filePath}`, data, options, err => {
         if (err) {
             console.error(err);
         }
@@ -72,10 +133,10 @@ async function main() {
     } else {
         file = "./README.md";
     }
-    
+
     filePath = new FilePath(file);
     let markdownContent = await questionObjs.askQuestions();
-    writeToFile(filePath, markdownContent);
+    writeToFile(filePath.path, markdownContent);
 }
 
 main();
