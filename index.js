@@ -1,6 +1,4 @@
-const inquirer = require('inquirer'); // Load inquirer module for clean user input
 const fs = require('fs'); // Load file system module for file I/O
-const markdown = require('./utils/markdown.js'); // Load markdown.js class
 const question = require('./utils/questions.js'); // Load questions.js class definitions
 const a = require('./utils/answer.js'); // Load answer.js class
 //const { mainModule } = require('process');
