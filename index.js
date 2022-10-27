@@ -1,7 +1,42 @@
 // Import JavaScript modules
-const fs = require('fs'); // Load file system module for file I/O
+const fs = require('fs').promises; // Load file system module for file I/O
+const path = require('path'); // Load path module
 const question = require('./utils/questions.js'); // Load questions.js class definitions
 const a = require('./utils/answer.js'); // Load answer.js class
+
+class FilePath {
+    // Private Member Property
+    #defaultPath = "./README.md";
+    
+    // Public Member Properties
+    filePath;
+    directory;
+    fileName;
+    extension;
+
+    constructor(pathString) {
+        this.#setFile(path.resolve(pathString)); // Do I need further verification?
+    }
+
+    validFile() {
+
+    }
+
+    validDirectory() {
+
+    }
+
+    #setFile(file) {
+        this.filePath = file;
+        this.directory = path.dirname(file);
+        this.fileName = path.basename(file);
+        this.extension = path.extname(file);
+    }
+
+    #defaultFile() {
+        this.#setFile(this.#defaultPath);
+    }
+}
 
 function writeToFile(filePath, data) {
     fs.writeFile(`${filePath}`, data, err => {
@@ -29,12 +64,16 @@ function init() {
 
 async function main() {
     // Function call to initialize app
-    let filePath = "./README.md";
+    let file, filePath;
     let questionObjs = init();
-    if (process.argv[2] != undefined) {
-        filePath = process.argv[2];
+    
+    if (process.argv[2] != null) {
+        file = process.argv[2];
+    } else {
+        file = "./README.md";
     }
-
+    
+    filePath = new FilePath(file);
     let markdownContent = await questionObjs.askQuestions();
     writeToFile(filePath, markdownContent);
 }
