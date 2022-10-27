@@ -1,3 +1,4 @@
+// Import JavaScript modules
 const inquirer = require('inquirer'); // Load inquirer module for clean user input
 const markdown = require('./markdown.js'); // Load markdown.js class
 const a = require('./answer.js'); // Load answer.js class
