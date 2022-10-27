@@ -17,6 +17,10 @@ class FilePath {
     path;
 
     constructor(pathString) {
+        if ((pathString == null) || (pathString === "")) {
+            this.update(this.#defaultPath);
+        }
+
         this.update(pathString);
     }
 
@@ -125,16 +129,19 @@ function init() {
 
 async function main() {
     // Function call to initialize app
-    let file, filePath;
+    let filePath;
+    //let file;
     let questionObjs = init();
     
-    if (process.argv[2] != null) {
-        file = process.argv[2];
-    } else {
-        file = "./README.md";
-    }
+    // Error checking within FilePath Class. Do not need conditional below
+    // if (process.argv[2] != null) {
+    //     file = process.argv[2];
+    // } else {
+    //     file = "./README.md";
+    // }
 
-    filePath = new FilePath(file);
+    //filePath = new FilePath(file);
+    filePath = new FilePath(process.argv[2]);
     let markdownContent = await questionObjs.askQuestions();
     writeToFile(filePath.path, markdownContent);
 }
