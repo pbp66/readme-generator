@@ -1,15 +1,9 @@
 const inquirer = require('inquirer'); // Load inquirer module for clean user input
-const fs = require('fs'); // Load file server module for file I/O
+const fs = require('fs'); // Load file system module for file I/O
 const markdown = require('./utils/markdown.js'); // Load markdown.js class
 const question = require('./utils/questions.js'); // Load questions.js class definitions
 const a = require('./utils/answer.js'); // Load answer.js class
 //const { mainModule } = require('process');
-
-class Test {
-
-}
-
-
 
 function writeToFile(fileName, data) {
     fs.writeFile(`./${fileName}`, data, err => {
@@ -17,18 +11,6 @@ function writeToFile(fileName, data) {
             console.error(err);
         }
     });
-}
-
-function askQuestions(questionObjects) {
-    let answers = [];
-    inquirer.prompt(questionObjects, answers)
-        .then((answers) => {
-            let answerObj = new a.Answer();
-            Object.assign(answerObj, answers);
-            let newMD = new markdown.Markdown(answerObj);
-            let markdownContent = newMD.generateMarkdown()           
-            writeToFile("README.md", markdownContent);
-        });
 }
 
 // TODO: Create a function to initialize app
@@ -39,12 +21,11 @@ function init() {
     return new question.Questions(questions, titles);
 }
 
-function main() {
+async function main() {
     // Function call to initialize app
     let questionObjs = init();
-    //console.log(questionObjs);
-
-    askQuestions(questionObjs.questions);
+    let markdownContent = await questionObjs.askQuestions();
+    writeToFile("README.md", markdownContent);
 }
 
 main();

@@ -2,25 +2,25 @@
 
 ## Description
 
-Test Test
+Test Test Test
 
 ## Table of Contents
 
- - [Installation](#installation)
- - [Usage](#usage)
- - [Contribution](#contribution)
- - [Tests](#tests)
- - [License](#license)
- - [Questions](#questions)
+1. [Installation](#installation)
+2. [Usage](#usage)
+3. [Contribution](#contribution)
+4. [Tests](#tests)
+5. [License](#license)
+6. [Questions](#questions)
 
 
 ## Installation
 
-test test
+Download/Clone from GitHub
 
 ## Usage
 
-tess?
+node <project-directory/index.js>
 
 ## Credits
 
@@ -32,7 +32,7 @@ undefined
 
 ## How to Contribute
 
-TEST
+Go for it
 
 ## Questions
 
