@@ -18,12 +18,12 @@ class FilePath {
 
     constructor(pathString) {
         if ((pathString == null) || (pathString === "")) {
-            this.update(this.#defaultPath);
+            this.#defaultFile();
+        } else {
+            this.update(pathString);
+            this.validateFile();
+            this.validateDirectory();
         }
-
-        this.update(pathString);
-        this.validateFile();
-        this.validateDirectory();
     }
 
     validateFile() {
@@ -84,8 +84,8 @@ class FilePath {
     }
 
     update(file) {
-        // path.parse() will provide the absolute path if a relative path is specified
-        let {root, dir, base, name, ext} = path.parse(path.parse(file));
+        // path.resolve() will provide the absolute path if a relative path is specified
+        let {root, dir, base, name, ext} = path.parse(path.resolve(file));
         
         this.#root = root;
         this.#directory = dir;
