@@ -21,7 +21,7 @@ class FilePath {
             this.#defaultFile();
         } else {
             this.update(pathString);
-            this.validateFile();
+            this.validateFile(); // TODO: Refactor code as validateFile will overwrite the original path if no file is provided. Call validate directory first?
             this.validateDirectory();
         }
     }
@@ -33,9 +33,24 @@ class FilePath {
         }
     }
 
-    validateDirectory() {
+    async validateDirectory() {
         // Does directory path exist in file system?
+        // fs.access(this.path, error => )
         // If so, do nothing. Else, create the directories
+        try {
+            let fileStats = await fs.lstat(this.path);
+            if (fileStats.isDirectory()) {
+                this.#defaultFile();
+            }
+        } catch (err) {
+            if (err.code === "ENOENT") {
+                console.log(this.#directory);
+                await fs.mkdir(this.#directory, {recursive: true}); // TODO: If no file is passed, this.#base will store a folder. this.#base is needed for the complete path
+                this.buildPath(this.#directory, this.#fileName);
+            } else {
+                console.log(err);
+            }
+        }
     }
 
     getRoot() {
@@ -86,7 +101,7 @@ class FilePath {
     update(file) {
         // path.resolve() will provide the absolute path if a relative path is specified
         let {root, dir, base, name, ext} = path.parse(path.resolve(file));
-        
+        console.log({root, dir, base, name, ext});
         this.#root = root;
         this.#directory = dir;
         this.#fileName = base;
@@ -140,14 +155,6 @@ async function main() {
     //let file;
     let questionObjs = init();
     
-    // Error checking within FilePath Class. Do not need conditional below
-    // if (process.argv[2] != null) {
-    //     file = process.argv[2];
-    // } else {
-    //     file = "./README.md";
-    // }
-
-    //filePath = new FilePath(file);
     filePath = new FilePath(process.argv[2]);
     let markdownContent = await questionObjs.askQuestions();
     writeToFile(filePath.path, markdownContent);
@@ -158,4 +165,5 @@ async function main() {
 // DEV TESTING SECTION
 
 let filePath = new FilePath(process.argv[2]);
-console.log(JSON.stringify(filePath));
+console.log(filePath);
+console.log(__dirname);
