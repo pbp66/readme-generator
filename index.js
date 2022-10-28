@@ -22,14 +22,20 @@ class FilePath {
         }
 
         this.update(pathString);
+        this.validateFile();
+        this.validateDirectory();
     }
 
-    validFile() {
-
+    validateFile() {
+        // If provided file has no extension, specify default filename
+        if (!this.#extension) {
+            this.#defaultFile();
+        }
     }
 
-    validDirectory() {
-
+    validateDirectory() {
+        // Does directory path exist in file system?
+        // If so, do nothing. Else, create the directories
     }
 
     getRoot() {
@@ -65,7 +71,7 @@ class FilePath {
 
     setName(name) {
         this.#name = name;
-        this.buildPath(this.#directory, this.#name, this.#ext);
+        this.buildPath(this.#directory, this.#name, this.#extension);
     }
 
     getExtension() {
@@ -74,11 +80,12 @@ class FilePath {
 
     setExtension(ext) {
         this.#extension = ext;
-        this.buildPath(this.#directory, this.#name, this.#ext);
+        this.buildPath(this.#directory, this.#name, this.#extension);
     }
 
     update(file) {
-        let {root, dir, base, name, ext} = path.parse(file);
+        // path.parse() will provide the absolute path if a relative path is specified
+        let {root, dir, base, name, ext} = path.parse(path.parse(file));
         
         this.#root = root;
         this.#directory = dir;
@@ -93,7 +100,7 @@ class FilePath {
     }
 
     #defaultFile() {
-        this.updateFile(this.#defaultPath);
+        this.update(this.#defaultPath);
     }
 }
 
@@ -146,6 +153,9 @@ async function main() {
     writeToFile(filePath.path, markdownContent);
 }
 
-main();
+//main();
 
 // DEV TESTING SECTION
+
+let filePath = new FilePath(process.argv[2]);
+console.log(JSON.stringify(filePath));
