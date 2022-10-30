@@ -1,3 +1,8 @@
+// Import JavaScript modules
+const inquirer = require('inquirer'); // Load inquirer module for clean user input
+const markdown = require('./markdown.js'); // Load markdown.js class
+const a = require('./answer.js'); // Load answer.js class
+
 class SimpleQuestion {
     constructor(question, title) {
         this.question = question;
@@ -137,6 +142,13 @@ class Questions {
             let newQ = new Question(question, "");
             this.questions.push(newQ);
         }
+    }
+
+    async askQuestions() {
+        const answers = await inquirer.prompt(this.questions);
+        let answerObj = new a.Answer(answers);
+        let newMD = new markdown.Markdown(answerObj);
+        return newMD.generateMarkdown();
     }
 }
 

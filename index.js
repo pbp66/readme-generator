@@ -1,49 +1,50 @@
-const inquirer = require('inquirer'); // Load inquirer module for clean user input
-const fs = require('fs'); // Load file server module for file I/O
-const markdown = require('./utils/markdown.js'); // Load markdown.js class
+// Import JavaScript modules
+const fs = require('fs').promises; // Load file system module for file I/O
 const question = require('./utils/questions.js'); // Load questions.js class definitions
 const a = require('./utils/answer.js'); // Load answer.js class
-//const { mainModule } = require('process');
+const fp = require('./utils/filepath.js');
 
-// TODO: Update array of questions for user input. Use template questions instead?
-const questions = ["What is the title of the project?", "Update the project description.", "Update the installation instructions.", "Update the usage information.", "Update the contribution guidelines.", "Update the test instructions", "Update the project license.", "Update the project owner GitHub user name.", "Update project owner email address."];
+function writeToFile(filePath, data) {
+    let options = {
+        encoding: "utf8",
+        flag: "w",
+        mode: 0o666
+    };
 
-// TODO: Change to the keys of an answer class instance
-const questionTitles = ["title", "description", "installation", "usage", "contribution", "tests", "license", "username", "email"];
-
-function writeToFile(fileName, data) {
-    fs.writeFile(`./${fileName}`, data, err => {
+    fs.writeFile(`${filePath}`, data, options, err => {
         if (err) {
             console.error(err);
         }
     });
 }
 
-function askQuestions(questionObjects) {
-    let answers = [];
-    inquirer.prompt(questionObjects, answers)
-        .then((answers) => {
-            let answerObj = new a.Answer();
-            Object.assign(answerObj, answers);
-            let newMD = new markdown.Markdown(answerObj);
-            let markdownContent = newMD.generateMarkdown()           
-            writeToFile("README.md", markdownContent);
-        });
-}
-
-// TODO: Create a function to initialize app
 function init() {
-    return new question.Questions(questions, questionTitles);
+    let titles = Object.keys(new a.Answer());
+    const questions = [
+        "Provide the project title: ", 
+        "Provide the project description: ", 
+        "Provide the project installation instructions: ", 
+        "Provide the project usage information: ", 
+        "Provide the project contribution guidelines: ", 
+        "Provide the project test instructions: ", 
+        "Provide the project license: ", 
+        "Provide the project owner's GitHub user name: ", 
+        "Provide the project owner's email address: "
+    ];
+    return new question.Questions(questions, titles);
 }
 
-function main() {
+async function main() {
     // Function call to initialize app
+    let filePath;
+    //let file;
     let questionObjs = init();
-    //console.log(questionObjs);
-
-    askQuestions(questionObjs.questions);
+    
+    filePath = new fp.FilePath(process.argv[2]);
+    let markdownContent = await questionObjs.askQuestions();
+    writeToFile(filePath.path, markdownContent);
 }
 
-main();
+//main();
 
 // DEV TESTING SECTION
