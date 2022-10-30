@@ -77,15 +77,13 @@ class Markdown {
     }
 
     generateQuestionsSection(username, email) {
-        // let validUsername = this.#isValidString(username);
-        // let validEmail = this.#isValidString(email);
-        // if (valid) {
-
-        // }
+        let section = "";
+        let githubURL = new URL("https://github.com/");
+        githubURL.pathname += username;
         
         // If input is not valid, return an empty string
         // return "";
-        return `${username} @ ${email}`;
+        return `${githubURL} @ ${email}`;
     }
 
     generateTOC() {
