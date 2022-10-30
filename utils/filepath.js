@@ -1,4 +1,6 @@
+const fs = require('fs').promises; // Load file system module for file I/O
 const path = require('path'); // Load path module
+const { isFloat32Array } = require('util/types');
 
 class FilePath {
     // Private Member Properties
@@ -13,38 +15,43 @@ class FilePath {
     path;
 
     constructor(pathString) {
-        if ((pathString == null) || (pathString === "")) {
-            this.#defaultFile();
+        if (isFalsy(pathString)) {
+            this.#setDefaultFile();
         } else {
-            this.update(pathString);
-            this.validateFile(); // TODO: Refactor code as validateFile will overwrite the original path if no file is provided. Call validate directory first?
-            this.validateDirectory();
+            this.validateFilePath(pathString);
+        }
+    }
+
+    async validateFilePath(pathInput) {
+        this.update(pathInput);
+        const dirExist = await this.validateDirectory();
+        if (!dirExist) {
+            await fs.mkdir(this.#directory, {recursive: true}); 
+            //this.buildPath(this.#directory, this.#fileName);
+        }
+        const properFile = this.validateFile();
+        if (!properFile) {
+            this.#setDefaultFile();
         }
     }
 
     validateFile() {
-        // If provided file has no extension, specify default filename
-        if (!this.#extension) {
-            this.#defaultFile();
-        }
+        return !isFalsy(this.#extension);
     }
 
     async validateDirectory() {
-        // Does directory path exist in file system?
-        // fs.access(this.path, error => )
-        // If so, do nothing. Else, create the directories
         try {
             let fileStats = await fs.lstat(this.path);
             if (fileStats.isDirectory()) {
-                this.#defaultFile();
+                return true;
             }
         } catch (err) {
             if (err.code === "ENOENT") {
-                console.log(this.#directory);
-                await fs.mkdir(this.#directory, {recursive: true}); // TODO: If no file is passed, this.#base will store a folder. this.#base is needed for the complete path
-                this.buildPath(this.#directory, this.#fileName);
+                return false;
             } else {
                 console.log(err);
+                this.#setDefaultFile();
+                return true;
             }
         }
     }
@@ -97,22 +104,34 @@ class FilePath {
     update(file) {
         // path.resolve() will provide the absolute path if a relative path is specified
         let {root, dir, base, name, ext} = path.parse(path.resolve(file));
-        console.log({root, dir, base, name, ext});
         this.#root = root;
         this.#directory = dir;
         this.#fileName = base;
         this.#name = name;
         this.#extension = ext;
-        this.buildPath(dir, base);
+
+        if (isFalsy(ext)) {
+            this.#directory += `/${this.#name}`;
+            this.#fileName = "";
+            this.#name = "";
+            this.#extension = "";
+        }
+
+        this.buildPath(this.#directory, this.#fileName);
     }
 
     buildPath(...paths) {
         this.path = path.join(...paths);
     }
 
-    #defaultFile() {
+    #setDefaultFile() {
         this.update(this.#defaultPath);
     }
+};
+
+function isFalsy(boolStatement) {
+    const falsyValue = [false, null, undefined, 0, -0, 0n, NaN, ""];
+    return falsyValue.includes(boolStatement);
 }
 
 module.exports = {FilePath: FilePath};

@@ -48,7 +48,3 @@ async function main() {
 //main();
 
 // DEV TESTING SECTION
-
-let filePath = new fp.FilePath(process.argv[2]);
-console.log(filePath);
-console.log(__dirname);
