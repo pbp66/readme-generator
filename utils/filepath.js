@@ -1,3 +1,5 @@
+const path = require('path'); // Load path module
+
 class FilePath {
     // Private Member Properties
     #defaultPath = "./README.md";

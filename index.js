@@ -1,6 +1,5 @@
 // Import JavaScript modules
 const fs = require('fs').promises; // Load file system module for file I/O
-const path = require('path'); // Load path module
 const question = require('./utils/questions.js'); // Load questions.js class definitions
 const a = require('./utils/answer.js'); // Load answer.js class
 const fp = require('./utils/filepath.js');
@@ -50,6 +49,6 @@ async function main() {
 
 // DEV TESTING SECTION
 
-let filePath = new FilePath(process.argv[2]);
+let filePath = new fp.FilePath(process.argv[2]);
 console.log(filePath);
 console.log(__dirname);
