@@ -1,3 +1,6 @@
+const lic = require("./license.js");
+const badge = require("./badge.js");
+
 class Markdown {
     constructor(dataToRender) {
         this.title = this.generateTitleSection(dataToRender.title);
