@@ -45,6 +45,6 @@ async function main() {
     writeToFile(filePath.path, markdownContent);
 }
 
-//main();
+main();
 
 // DEV TESTING SECTION
