@@ -78,12 +78,20 @@ class Markdown {
 
     generateQuestionsSection(username, email) {
         let section = "";
-        let githubURL = new URL("https://github.com/");
-        githubURL.pathname += username;
-        
-        // If input is not valid, return an empty string
-        // return "";
-        return `${githubURL} @ ${email}`;
+        let githubURL = "";
+        if (username != "") {
+            githubURL = new URL("https://github.com/");
+            githubURL.pathname += username;
+            section = `Repo owner: [${username}](${githubURL}).\n`;
+        }
+        if (email != "") {
+            section += `For any questions, you may contact ${username} via email: ${email}. Please format your email using the following template:
+    - Subject: Repository - Question/Issue
+    - Body: Summarize the issue with a brief description for the first paragraph. Additional paragraphs can be used for a long description, if needed. Include any errors when using this project
+    - Signature: Please leave an email address so that any updates are sent to the correct questioner.`;
+        }
+
+        return section;
     }
 
     generateTOC() {
@@ -101,12 +109,13 @@ class Markdown {
     }
     
     generateLicenseSection(license) {
-        this.#renderLicenseBadge();
-        this.#renderLicenseLink();
-        this.#renderLicenseSection();
+        this.#renderLicenseBadge(license);
+        this.#renderLicenseLink(license);
+        this.#renderLicenseSection(license);
     }
 
     generateMarkdown() {
+        // TODO: If a section is left blank, do not include it when generating the markdown content.
         let markdown = 
             `# ${this.title}\n\n## Description\n\n${this.description}\n\n## Table of Contents\n\n${this.toc}\n\n## Installation\n\n${this.installation}\n\n## Usage\n\n${this.usage}\n\n## Credits\n\n${this.credits}\n\n## License\n\n${this.license}\n\n## How to Contribute\n\n${this.contribution}\n\n## Questions\n\n${this.questions}\n\n## Tests\n\n${this.tests}`
 
