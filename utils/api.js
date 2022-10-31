@@ -23,6 +23,14 @@ class API {
     async fetch() {
         return (await axios.get(this.url)).data;
     }
+
+    setSearchParameters(parameterObject) {
+        this.resetURL();
+        let keys = Object.keys(parameterObject);
+        for (const key of keys) {
+            this.url.searchParams.append(key, parameterObject[key]);
+        }
+    }
 }
 
 module.exports = {API: API};
