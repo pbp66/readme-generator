@@ -11,7 +11,7 @@ class Markdown {
         this.tests = this.generateTestsSection(dataToRender.testing);
         this.license = this.generateLicenseSection(dataToRender.license);
         this.questions = this.generateQuestionsSection(dataToRender.username, dataToRender.email);
-        //this.credits = this.generateCreditsSection(dataToRender);
+        this.credits = this.generateCreditsSection(dataToRender);
         this.toc = this.generateTOC();
 
         this.generateMarkdown();
@@ -20,9 +20,8 @@ class Markdown {
     generateTitleSection(title) {
         let valid = this.#isValidString(title);
         if (valid)  {
-            return toTitleCase(title);
+            return `# ${toTitleCase(title)}\n\n`;
         }
-
         // If input is not valid, return an empty string
         return "";
     }
@@ -30,19 +29,31 @@ class Markdown {
     generateDescriptionSection(description) {
         let valid = this.#isValidString(description);
         if (valid) {
-            return description;
+            return `## Description\n\n${description}\n\n`;
         }
-
         // If input is not valid, return an empty string
         return "";
+    }
+
+    generateTOC() {
+        let keys = Object.keys(this);
+        let toc = [];
+        toc = keys.filter(element => !(["title", "description"].includes(element)));
+        toc = toc.filter(element => this[element] != "");
+        toc = toc.map((element, index) => `${index + 1}. [${toTitleCase(element)}](#${element})\n`);
+
+        // If the markdown file is empty except for title and description, generate no TOC
+        if (toc.length === 0) {
+            return "";
+        }
+        return `## Table of Contents\n\n${toc.join("")}\n\n`;
     }
 
     generateInstallationSection(installation) {
         let valid = this.#isValidString(installation);
         if (valid) {
-            return installation;
+            return `## Installation\n\n${installation}\n\n`;
         }
-        
         // If input is not valid, return an empty string
         return "";
     }
@@ -50,11 +61,29 @@ class Markdown {
     generateUsageSection(usage) {
         let valid = this.#isValidString(usage);
         if (valid) {
-            return usage;
+            // TODO: Add images automatically? or video content?
+            return `## Usage\n\n${usage}\n\n`;
         }
+        // If input is not valid, return an empty string
+        return "";
+    }
 
-        // TODO: Add images automatically? or video content?
-        
+    generateCreditsSection(credits) {
+        // TODO: Generate collaborators based on repo contributions. GitHub API?
+        let valid = this.#isValidString(credits);
+        if (valid) {
+            return '## Credits\n\n${credits}\n\n'
+        }
+        // If input is not valid, return an empty string
+        return "";
+    }
+
+    async generateLicenseSection(licenseInput) {
+        let valid = this.#isValidString(licenseInput);
+        if (valid) {
+            let licenseBadge = await this.#renderLicenseSection(licenseInput);
+            return `## License\n\n${licenseBadge}\n\n`;
+        }
         // If input is not valid, return an empty string
         return "";
     }
@@ -62,19 +91,8 @@ class Markdown {
     generateContributionSection(contribution) {
         let valid = this.#isValidString(contribution);
         if (valid) {
-            return contribution;
+            return `## How to Contribute\n\n${contribution}\n\n`;
         }
-        
-        // If input is not valid, return an empty string
-        return "";
-    }
-
-    generateTestsSection(testing) {
-        let valid = this.#isValidString(testing);
-        if (valid) {
-            return testing;
-        }
-        
         // If input is not valid, return an empty string
         return "";
     }
@@ -89,60 +107,59 @@ class Markdown {
         }
         if (email != "") {
             section += `For any questions, you may contact ${username} via email: ${email}. Please format your email using the following template:
-    - Subject: Repository - Question/Issue
-    - Body: Summarize the issue with a brief description for the first paragraph. Additional paragraphs can be used for a long description, if needed. Include any errors when using this project
-    - Signature: Please leave an email address so that any updates are sent to the correct questioner.`;
+- Subject: Repository - Question/Issue
+- Body: Summarize the issue with a brief description for the first paragraph. Additional paragraphs can be used for a long description, if needed. Include any errors when using this project
+- Signature: Please leave an email address so that any updates are sent get back to you.`;
         }
 
-        return section;
+        if (this.#isValidString(section)) {
+            return `## Questions\n\n${section}\n\n`;
+        }
+        return "";
     }
 
-    generateTOC() {
-        let keys = Object.keys(this);
-        let toc = [];
+    generateTestsSection(testing) {
+        let valid = this.#isValidString(testing);
+        if (valid) {
 
-        // TODO: Update tabs and spacing for proper format in the file
-        toc = keys.filter(element => !(["title", "description"].includes(element)));
-        toc = toc.map((element, index) => `${index + 1}. [${toTitleCase(element)}](#${element})\n`);
-        return toc.join("");
+            return `## Tests\n\n${testing}`;
+        }
+        // If input is not valid, return an empty string
+        return "";
     }
 
-    generateCreditsSection() {
-        // TODO: Generate collaborators based on repo contributions. GitHub API?
-    }
-    
-    generateLicenseSection(license) {
-        this.#renderLicenseBadge(license);
-        this.#renderLicenseLink(license);
-        this.#renderLicenseSection(license);
-    }
-
-    generateMarkdown() {
-        // TODO: If a section is left blank, do not include it when generating the markdown content.
-        let markdown = 
-            `# ${this.title}\n\n## Description\n\n${this.description}\n\n## Table of Contents\n\n${this.toc}\n\n## Installation\n\n${this.installation}\n\n## Usage\n\n${this.usage}\n\n## Credits\n\n${this.credits}\n\n## License\n\n${this.license}\n\n## How to Contribute\n\n${this.contribution}\n\n## Questions\n\n${this.questions}\n\n## Tests\n\n${this.tests}`
-
+    async generateMarkdown() {
+        const markdownKeys = Object.keys(this);
+        let markdown = "";
+        for (const key of markdownKeys) {
+            if (this[key] != "") {
+                markdown += await this[key];
+            }
+        }
         return markdown;
     }
 
-    // If there is no license, return an empty string
-    #renderLicenseBadge(license) { 
-
+    // TODO: Allow user to specify color? Randomly generate color?
+    async #getLicenseBadge(licenseInput) { 
+        let license = await this.#getLicense(licenseInput);
+        let licenseBadge = new badge.Badge("license", license.id);
+        const badgeAPI = new badge.BadgeAPI();
+        return await badgeAPI.createBadge(licenseBadge);
     }
 
-    // If there is no license, return an empty string
-    #renderLicenseLink(license) { 
-
+    async #getLicense(licenseInput) { 
+        const licenseAPI = new lic.LicenseAPI();
+        return await licenseAPI.getLicense(licenseInput);
     }
 
-    // If there is no license, return an empty string
-    #renderLicenseSection(license) { 
-        
+    async #renderLicenseSection(licenseInput) { 
+        let badgeLink = await this.#getLicenseBadge(licenseInput);
+        return `![License](${badgeLink.img})`;
     }
 
-    #isValidString(string) {
+    #isValidString(str) {
         //console.log(`input (${string}) is an instance of String: ${typeof string}`)
-        return (typeof string) === "string";
+        return (((typeof str) === "string") && (str != ""));
     }
 }
 
