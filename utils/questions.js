@@ -118,14 +118,13 @@ class Questions {
     questions = [];
 
     constructor(questions = [], keys = []) {
-        if (questions instanceof Question) {
-            this.questions = questions;
-        } else if (questions instanceof SimpleQuestion) {
-            this.questions = questions.forEach((item) => {
-                return new Question(item.question, item.title);
-            });
-        } else {
-            for (let i = 0; i < questions.length; i++) {
+        for (let i = 0; i < questions.length; i++) {
+
+            if (questions[i] instanceof Question) {
+                this.questions.push(questions[i]);
+            } else if (questions[i] instanceof SimpleQuestion) {
+                this.questions.push(new Question(questions[i].question, questions[i].title));
+            } else {
                 if (keys[i] != null) {
                     this.questions.push(new Question(questions[i], keys[i]));
                 } else {

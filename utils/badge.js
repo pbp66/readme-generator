@@ -12,8 +12,7 @@ class Badge {
 
 class BadgeAPI extends api.API {
     constructor() {
-        //super(new URL("https://img.shields.io/static/v1"));
-        super(new URL("https://img.shields.io/endpoint"));
+        super(new URL("https://img.shields.io/static/v1"));
         this.label;
         this.message;
         this.color;

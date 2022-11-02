@@ -132,19 +132,3 @@ function capitalizeWord(str) {
 }
 
 module.exports = { License: License, LicenseAPI: LicenseAPI };
-
-// DEV TESTING SECTION
-async function test() {
-    let lic = new LicenseAPI();
-    let response = await lic.getLicense("MIT");
-    console.log(response);
-}
-
-async function test2() {
-    let lic = new LicenseAPI();
-    let response = await lic.getAll();
-    console.log(response);
-}
-
-//test();
-//test2();

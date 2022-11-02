@@ -1,6 +1,7 @@
 // Import JavaScript modules
 const fs = require('fs').promises; // Load file system module for file I/O
-const question = require('./utils/questions.js'); // Load questions.js class definitions
+const path = require('path'); // Load path module
+const q = require('./utils/questions.js'); // Load questions.js class definitions
 const a = require('./utils/answer.js'); // Load answer.js class
 const fp = require('./utils/filepath.js');
 
@@ -20,29 +21,31 @@ function writeToFile(filePath, data) {
 
 function init() {
     let titles = Object.keys(new a.Answer());
-    const questions = [
-        "Provide the project title: ", 
-        "Provide the project description: ", 
-        "Provide the project installation instructions: ", 
-        "Provide the project usage information: ", 
-        "Provide the project contribution guidelines: ", 
-        "Provide the project test instructions: ", 
-        "Provide the project license: ", 
-        "Provide the project owner's GitHub user name: ", 
-        "Provide the project owner's email address: "
+    let questions = [];
+    let template = "Provide the project";
+    const sections = [
+        {section: "title", default: path.parse(__dirname).name},
+        {section: "description", default: ""},
+        {section: "installation instructions", default: ""},
+        {section: "usage information", default: ""},
+        {section: "contribution guidelines", default: ""},
+        {section: "test instructions", default: "No Tests Provided"},
+        {section: "license", default: "MIT"},
+        {section: "project owner's GitHub user name", default: ""},
+        {section: "project owner's email address", default: ""}
     ];
-    return new question.Questions(questions, titles);
+
+    for (let i = 0; i < sections.length; i++) {
+        questions.push(new q.Question(`${template} ${sections[i].section}: `, titles[i], "input", sections[i].default));
+    }
+
+    return new q.Questions(questions);
 }
 
 async function main() {
-    // Function call to initialize app
-    let filePath;
-    //let file;
+    let filePath = new fp.FilePath(process.argv[2]);;
     let questionObjs = init();
-    
-    filePath = new fp.FilePath(process.argv[2]);
-    let markdownContent = await questionObjs.askQuestions();
-    writeToFile(filePath.path, markdownContent);
+    writeToFile(filePath.path, await questionObjs.askQuestions());
 }
 
 main();
