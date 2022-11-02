@@ -79,10 +79,16 @@ class Markdown {
     }
 
     async generateLicenseSection(licenseInput) {
-        let valid = this.#isValidString(licenseInput);
-        if (valid) {
-            let licenseBadge = await this.#renderLicenseSection(licenseInput);
-            return `## License\n\n${licenseBadge}\n\n`;
+        if (this.#isValidString(licenseInput)) {
+            let license = await this.#getLicense(licenseInput);
+            let licenseBadge = await this.#getLicenseBadge(license);
+            let licenseLink = `![License](${licenseBadge.img})`;
+            let licenseSection = `${licenseLink}
+${license.id}
+Copyright (c) ${new Date().getFullYear()}
+Add license text from: ${license.text[0].url}
+`;
+            return `## License\n\n${licenseSection}\n\n`;
         }
         // If input is not valid, return an empty string
         return "";
@@ -140,8 +146,7 @@ class Markdown {
     }
 
     // TODO: Allow user to specify color? Randomly generate color?
-    async #getLicenseBadge(licenseInput) { 
-        let license = await this.#getLicense(licenseInput);
+    async #getLicenseBadge(license) { 
         let licenseBadge = new badge.Badge("license", license.id);
         const badgeAPI = new badge.BadgeAPI();
         return await badgeAPI.createBadge(licenseBadge);
@@ -150,11 +155,6 @@ class Markdown {
     async #getLicense(licenseInput) { 
         const licenseAPI = new lic.LicenseAPI();
         return await licenseAPI.getLicense(licenseInput);
-    }
-
-    async #renderLicenseSection(licenseInput) { 
-        let badgeLink = await this.#getLicenseBadge(licenseInput);
-        return `![License](${badgeLink.img})`;
     }
 
     #isValidString(str) {
