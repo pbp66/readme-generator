@@ -1,5 +1,6 @@
 // Import JavaScript modules
 const fs = require('fs').promises; // Load file system module for file I/O
+const path = require('path'); // Load path module
 const q = require('./utils/questions.js'); // Load questions.js class definitions
 const a = require('./utils/answer.js'); // Load answer.js class
 const fp = require('./utils/filepath.js');
@@ -23,7 +24,7 @@ function init() {
     let questions = [];
     let template = "Provide the project";
     const sections = [
-        {section: "title", default: ""},
+        {section: "title", default: path.parse(__dirname).name},
         {section: "description", default: ""},
         {section: "installation instructions", default: ""},
         {section: "usage information", default: ""},
@@ -42,14 +43,9 @@ function init() {
 }
 
 async function main() {
-    // Function call to initialize app
-    let filePath;
-    //let file;
+    let filePath = new fp.FilePath(process.argv[2]);;
     let questionObjs = init();
-    
-    filePath = new fp.FilePath(process.argv[2]);
-    let markdownContent = await questionObjs.askQuestions();
-    writeToFile(filePath.path, markdownContent);
+    writeToFile(filePath.path, await questionObjs.askQuestions());
 }
 
 main();

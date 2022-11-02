@@ -2,19 +2,21 @@ const lic = require("./license.js");
 const badge = require("./badge.js");
 
 class Markdown {
+
+    #order;
+    markdown = "";
+
     constructor(dataToRender) {
         this.title = this.generateTitleSection(dataToRender.title);
         this.description = this.generateDescriptionSection(dataToRender.description);
         this.installation = this.generateInstallationSection(dataToRender.installation);
         this.usage = this.generateUsageSection(dataToRender.usage);
-        this.contribution = this.generateContributionSection(dataToRender.contribution);
-        this.tests = this.generateTestsSection(dataToRender.testing);
+        this.contribute = this.generateContributionSection(dataToRender.contribution);
+        this.tests = this.generateTestsSection(dataToRender.tests);
         this.license = this.generateLicenseSection(dataToRender.license);
         this.questions = this.generateQuestionsSection(dataToRender.username, dataToRender.email);
         this.credits = this.generateCreditsSection(dataToRender);
         this.toc = this.generateTOC();
-
-        this.generateMarkdown();
     }
 
     generateTitleSection(title) {
@@ -36,9 +38,21 @@ class Markdown {
     }
 
     generateTOC() {
-        let keys = Object.keys(this);
-        let toc = [];
-        toc = keys.filter(element => !(["title", "description"].includes(element)));
+        /*
+        this.#order = [
+            this.title, 
+            this.description, 
+            this.toc, 
+            this.installation, 
+            this.usage, 
+            this.credits, 
+            await this.license, 
+            this.contribute, 
+            this.tests, 
+            this.questions
+        ];
+        */
+        let toc = ["installation", "usage", "credits", "license", "contribute", "tests", "questions"];
         toc = toc.filter(element => this[element] != "");
         toc = toc.map((element, index) => `${index + 1}. [${toTitleCase(element)}](#${element})\n`);
 
@@ -113,6 +127,7 @@ Add license text from: ${license.text[0].url}
         }
         if (email != "") {
             section += `For any questions, you may contact ${username} via email: ${email}. Please format your email using the following template:
+
 - Subject: Repository - Question/Issue
 - Body: Summarize the issue with a brief description for the first paragraph. Additional paragraphs can be used for a long description, if needed. Include any errors when using this project
 - Signature: Please leave an email address so that any updates are sent get back to you.`;
@@ -128,21 +143,30 @@ Add license text from: ${license.text[0].url}
         let valid = this.#isValidString(testing);
         if (valid) {
 
-            return `## Tests\n\n${testing}`;
+            return `## Tests\n\n${testing}\n\n`;
         }
         // If input is not valid, return an empty string
         return "";
     }
 
     async generateMarkdown() {
-        const markdownKeys = Object.keys(this);
-        let markdown = "";
-        for (const key of markdownKeys) {
-            if (this[key] != "") {
-                markdown += await this[key];
-            }
-        }
-        return markdown;
+        await this.generateOrder();
+        return this.#order.join("");
+    }
+
+    async generateOrder() {
+        this.#order = [
+            this.title, 
+            this.description, 
+            this.toc, 
+            this.installation, 
+            this.usage, 
+            this.credits, 
+            await this.license, 
+            this.contribute, 
+            this.tests, 
+            this.questions
+        ];
     }
 
     // TODO: Allow user to specify color? Randomly generate color?
