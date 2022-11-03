@@ -98,8 +98,11 @@ class Markdown {
             let licenseBadge = await this.#getLicenseBadge(license);
             let licenseLink = `![License](${licenseBadge.img})`;
             let licenseSection = `${licenseLink}
+
 ${license.id}
+
 Copyright (c) ${new Date().getFullYear()}
+
 Add license text from: ${license.text[0].url}
 `;
             return `## License\n\n${licenseSection}\n\n`;
