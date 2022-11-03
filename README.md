@@ -34,7 +34,7 @@ From your command-line, run `node index`. This will prompt the user to enter inf
 
 ## License
 
-[License](https://img.shields.io/static/v1?label=license&message=MIT&color=brightgreen)
+![License](https://img.shields.io/static/v1?label=license&message=MIT&color=brightgreen)
 
 MIT
 
