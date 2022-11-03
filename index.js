@@ -43,7 +43,7 @@ function init() {
 }
 
 async function main() {
-    let filePath = new fp.FilePath(process.argv[2]);;
+    let filePath = new fp.FilePath(process.argv[2]);
     let questionObjs = init();
     let file = await filePath.getPath();
     let data = await questionObjs.askQuestions();
