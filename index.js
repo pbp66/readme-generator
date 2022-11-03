@@ -45,7 +45,9 @@ function init() {
 async function main() {
     let filePath = new fp.FilePath(process.argv[2]);;
     let questionObjs = init();
-    writeToFile(filePath.path, await questionObjs.askQuestions());
+    let file = await filePath.getPath();
+    let data = await questionObjs.askQuestions();
+    writeToFile(file, data);
 }
 
 main();

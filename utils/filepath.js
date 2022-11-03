@@ -1,24 +1,22 @@
 const fs = require('fs').promises; // Load file system module for file I/O
 const path = require('path'); // Load path module
-const { isFloat32Array } = require('util/types');
 
 class FilePath {
     // Private Member Properties
     #defaultPath = "./README.md";
+    #defaultFileName = "README.md";
     #root;
     #directory;
     #fileName;
     #name;
     #extension;
-
-    // Public Member Properties
-    path;
+    #path;
 
     constructor(pathString) {
         if (isFalsy(pathString)) {
             this.#setDefaultFile();
         } else {
-            this.validateFilePath(pathString);
+            this.update(pathString);
         }
     }
 
@@ -27,12 +25,13 @@ class FilePath {
         const dirExist = await this.validateDirectory();
         if (!dirExist) {
             await fs.mkdir(this.#directory, {recursive: true}); 
-            //this.buildPath(this.#directory, this.#fileName);
+            this.buildPath(this.#directory, this.#fileName);
         }
         const properFile = this.validateFile();
         if (!properFile) {
-            this.#setDefaultFile();
+            this.setFileName(this.#defaultFileName);
         }
+        return true;
     }
 
     validateFile() {
@@ -41,7 +40,7 @@ class FilePath {
 
     async validateDirectory() {
         try {
-            let fileStats = await fs.lstat(this.path);
+            let fileStats = await fs.lstat(this.#path);
             if (fileStats.isDirectory()) {
                 return true;
             }
@@ -49,6 +48,7 @@ class FilePath {
             if (err.code === "ENOENT") {
                 return false;
             } else {
+                console.log("Caught Error");
                 console.log(err);
                 this.#setDefaultFile();
                 return true;
@@ -101,6 +101,15 @@ class FilePath {
         this.buildPath(this.#directory, this.#name, this.#extension);
     }
 
+    async getPath() {
+        await this.validateFilePath(this.#path);
+        return this.#path;
+    }
+
+    async setPath(pathString) {
+        return await this.validateFilePath(pathString);
+    }
+
     update(file) {
         // path.resolve() will provide the absolute path if a relative path is specified
         let {root, dir, base, name, ext} = path.parse(path.resolve(file));
@@ -121,7 +130,7 @@ class FilePath {
     }
 
     buildPath(...paths) {
-        this.path = path.join(...paths);
+        this.#path = path.join(...paths);
     }
 
     #setDefaultFile() {
