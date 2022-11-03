@@ -32,7 +32,7 @@ From GitHub, clone the repository onto your local machine. Navigate to the insta
 
 From your command-line, run `node index`. This will prompt the user to enter information on each of the README sections. After the prompts are complete, a `README.md` is generated within your current working folder. If you want to write the README file to a different folder path, call `node index [Optional Folder Path]`. This will generate the `README.md` file within the specified folder path. Additionally, if you specify a different README filename, the file will be generated with the specified name. Both the folder path and filename options can be used together: `node index ["Folder Path"/"File Name.ext"]`. View the video guide below for a visual walkthrough of this tool.
 
-[![README Generator Video Guide](./assets/video-guide.png)](./assets/video-guide.webm "README Generator Video Guide")
+[![README Generator Video Guide](./assets/video-guide.png)](https://youtu.be/DTQo6BTxOcU "README Generator Video Guide")
 
 ## License
 
